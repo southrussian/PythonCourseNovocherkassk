@@ -16,7 +16,7 @@ def include_substring(path_1: str, path_2: str):
         for j in splitted_arr_2:
             if i == j:
                 counter += 1
-    print(counter)
+    print("Количество идентичных предложений в двух текстовых файлах:", counter)
     return counter
 
 
