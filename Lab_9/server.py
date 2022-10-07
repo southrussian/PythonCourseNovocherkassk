@@ -39,5 +39,17 @@ def handle(client):
     while True:
         try:
             message = client.recv(1024)
+            print(f"{nicknames}")
+            broadcast(message[clients.index(client)])
         except:
-            pass
+            index = clients.index(client)
+            client.remove(client)
+            client.close()
+
+            nickname = nicknames[index]
+            nickname.remove(nickname)
+            break
+
+
+print("<<Server is running<<")
+receive()
