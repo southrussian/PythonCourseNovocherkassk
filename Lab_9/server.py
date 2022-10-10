@@ -25,7 +25,7 @@ host_socket = socket(AF_INET, SOCK_STREAM)
 host_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
 host = '127.0.0.1'
-port = 9090
+port = 8080
 host_socket.bind((host, port))
 host_socket.listen()
 
