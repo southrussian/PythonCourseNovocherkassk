@@ -1,39 +1,63 @@
-from socket import *
-from threading import *
-
-clients = set()
-
-
-def client_thread(client_socket, client_address):
-    while True:
-        message = client_socket.recv(1024).decode('utf-8')
-        print(client_address[0] + ":" + str(client_address[1] + " says: " + message))
-
-        for client in clients:
-            if client is not client_socket:
-                client.send((client_address[0] + ":" + str(client_address[1]) + " says: " + message).encode('utf-8'))
-
-        if not message:
-            clients.remove(client_socket)
-            print(client_address[0] + ":" + str(client_address[1] + 'disconnected'))
-            break
-
-    client_socket.close()
+#!/usr/bin/env python3
+"""Server for multithreaded (asynchronous) chat application."""
+from socket import AF_INET, socket, SOCK_STREAM
+from threading import Thread
 
 
-host_socket = socket(AF_INET, SOCK_STREAM)
-host_socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+def accept_incoming_connections():
+	"""Sets up handling for incoming clients."""
+	while True:
+		client, client_address = SERVER.accept()
+		print("%s:%s has connected." % client_address)
+		client.send(bytes("Greetings from the cave! Now type your name and press enter!", "utf8"))
+		addresses[client] = client_address
+		Thread(target=handle_client, args=(client,)).start()
 
-host = '127.0.0.1'
-port = 8080
-host_socket.bind((host, port))
-host_socket.listen()
 
-print('Server is waiting...')
+def handle_client(client):  # Takes client socket as argument.
+	"""Handles a single client connection."""
 
-while True:
-    client_socket, client_address = host_socket.accept()
-    clients.add(client_socket)
-    print("Connected with: ", client_address[0] + ':' + str(client_address[1]))
-    thread = Thread(target=client_thread, args=(client_socket, client_address, ))
-    thread.start()
+	name = client.recv(BUFSIZ).decode("utf8")
+	welcome = 'Welcome %s! If you ever want to quit, type {quit} to exit.' % name
+	client.send(bytes(welcome, "utf8"))
+	msg = "%s has joined the chat!" % name
+	broadcast(bytes(msg, "utf8"))
+	clients[client] = name
+
+	while True:
+		msg = client.recv(BUFSIZ)
+		if msg != bytes("{quit}", "utf8"):
+			broadcast(msg, name + ": ")
+		else:
+			client.send(bytes("{quit}", "utf8"))
+			client.close()
+			del clients[client]
+			broadcast(bytes("%s has left the chat." % name, "utf8"))
+			break
+
+
+def broadcast(msg, prefix=""):  # prefix is for name identification.
+	"""Broadcasts a message to all the clients."""
+
+	for sock in clients:
+		sock.send(bytes(prefix, "utf8") + msg)
+
+
+clients = {}
+addresses = {}
+
+HOST = ''
+PORT = 33000
+BUFSIZ = 1024
+ADDR = (HOST, PORT)
+
+SERVER = socket(AF_INET, SOCK_STREAM)
+SERVER.bind(ADDR)
+
+if __name__ == "__main__":
+	SERVER.listen(5)
+	print("Waiting for connection...")
+	ACCEPT_THREAD = Thread(target=accept_incoming_connections)
+	ACCEPT_THREAD.start()
+	ACCEPT_THREAD.join()
+	SERVER.close()
