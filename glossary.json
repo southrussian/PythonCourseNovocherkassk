@@ -1,22 +1,31 @@
-{
-    "glossary": {
-        "title": "example glossary",
-		"GlossDiv": {
-            "title": "S",
-			"GlossList": {
-                "GlossEntry": {
-                    "ID": "SGML",
-					"SortAs": "SGML",
-					"GlossTerm": "Standard Generalized Markup Language",
-					"Acronym": "SGML",
-					"Abbrev": "ISO 8879:1986",
-					"GlossDef": {
-                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
-						"GlossSeeAlso": ["GML", "XML"]
-                    },
-					"GlossSee": "markup"
-                }
-            }
-        }
+"2011-12-17 16:00": {
+    "local": "Av. Protásio Alves; esquina Ramiro Barcelos",
+    "coord": "-30.036916,-51.208093",
+    "sentido": "bairro-centro",
+    "veiculos": "automotores",
+    "modalidade": "semaforo 50-15",
+    "regime": "típico",
+    "pistas": "2+c",
+    "medicoes": [
+        [32, 50],
+        [40, 50],
+        [29, 50],
+        [32, 50],
+        [35, 50]
+        ]
+    },
+"2011-12-19 08:38": {
+    "local": "R. Fernandes Vieira; esquina Protásio Alves",
+    "coord": "-30.035535,-51.211079",
+    "sentido": "único",
+    "veiculos": "automotores",
+    "modalidade": "semáforo 30-70",
+    "regime": "típico",
+    "pistas": "3",
+    "medicoes": [
+        [23, 30],
+        [32, 30],
+        [33, 30],
+        [32, 30]
+        ]
     }
-}
