@@ -1,10 +1,11 @@
-# importing the "tarfile" module
-import tarfile
+# Написать функцию, которая принимает путь к изобра- жению и создает
+# отраженное изображение, сохраняя его по тому же пути.
 
-# open file
-file = tarfile.open('points.tar.gz')
+from PIL import Image, ImageOps
 
-# extracting file
-file.extractall('./tar_folder')
+im = Image.open('/Users/southrussian/PycharmProjects/Laboratories/floppa.png')
+im_mirror = ImageOps.mirror(im)
+im_mirror.save('/Users/southrussian/PycharmProjects/Laboratories/floppa.png', quality=95)
 
-file.close()
+
+
